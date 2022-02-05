@@ -11,8 +11,11 @@ endfunction
 function! Decrypt()
     let l:content = getline(1)
     echo "content: "..l:content
-    let l:decrypted = system("echo \""..l:content.."\" | "..g:decryptprg)    
+    silent let l:decrypted = system("echo \""..l:content.."\" | "..g:decryptprg)    
     echo "decrypted: "..l:decrypted
     normal! ggdG
     call setline(1, split(l:decrypted, "\n"))
 endfunction
+
+command Encrypt call Encrypt()
+command Decrypt call Decrypt()
