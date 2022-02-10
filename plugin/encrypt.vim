@@ -1,19 +1,35 @@
-let g:encryptprg = "aescrypt -e -"
-let g:decryptprg = "aescrypt -d -"
+let g:encryptprg = "aescrypt -e"
+let g:decryptprg = "aescrypt -d"
 
-function! Encrypt()
-    let l:content = join(getline(1, "$"), "\n")
-    silent let l:encrypted = system("echo -e \""..l:content.."\" | "..g:encryptprg)    
-    normal! ggdG
-    call setline(1, l:encrypted)
+function Input(txt)
+    call inputsave()
+    let l:val = input(a:txt)
+    call inputrestore()
+    return l:val
 endfunction
 
-function! Decrypt()
-    let l:content = getline(1)
+function Encrypt()
+    let l:password = Input("Enter password: ")
+    let l:passwordRep = Input("\nRe-enter password: ")
+
+    if l:password == l:passwordRep
+        let l:content = join(getline(1, "$"), "\n")
+        let l:encrypted = system("echo -e \""..l:content.."\" | "..g:encryptprg.." -p \""..l:password.."\" -")
+        normal ggdG
+        call setline(1, split(l:encrypted, "\n"))
+    else
+        echo "\npassword are different"
+    endif
+endfunction
+
+function Decrypt()
+    let l:password = Input("Enter password: ")
+
+    let l:content = join(getline(1, "$"), "\n")
     echo "content: "..l:content
-    silent let l:decrypted = system("echo \""..l:content.."\" | "..g:decryptprg)    
+    let l:decrypted = system("echo \""..l:content.."\" | "..g:decryptprg.." -p \""..l:password.."\" -")    
     echo "decrypted: "..l:decrypted
-    normal! ggdG
+    normal ggdG
     call setline(1, split(l:decrypted, "\n"))
 endfunction
 
