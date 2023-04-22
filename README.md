@@ -11,6 +11,6 @@ Plugin that use aescrypt to encrypt and decrypt text
 ## Usage
 
 ```
-:Encrypt <file>                                  Encrypt the current buffer to <file>
-:Decrypt <file>                                  Decrypt <file> to the current buffer
+:[range]Encrypt <file>                  Encrypt the current buffer to <file>
+:Decrypt <file>                         Decrypt <file> to the current buffer
 ```

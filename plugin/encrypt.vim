@@ -1,14 +1,14 @@
 let g:encryptprg = "aescrypt -e"
 let g:decryptprg = "aescrypt -d"
 
-function Input(txt)
+function! Input(txt)
     call inputsave()
     let l:val = inputsecret(a:txt)
     call inputrestore()
     return l:val ==# "" ? Input(a:txt) : l:val
 endfunction
 
-function Encrypt(file)
+function! Encrypt(is_selection, file) range
     let l:password = Input("Enter password: ")
     let l:passwordRep = Input("\nRe-enter password: ")
 
@@ -17,9 +17,9 @@ function Encrypt(file)
         return
     endif
 
-    let l:content = join(getline(1, "$"), "\n")
-    let l:cmd = "echo -e ".shellescape(l:content)." | ".g:encryptprg." -p ".shellescape(l:password)." -o ".a:file." -"
+    let l:content = a:is_selection ? join(getline(a:firstline, a:lastline), "\n") : join(getline(1, "$"), "\n")
 
+    let l:cmd = "echo -e ".shellescape(l:content)." | ".g:encryptprg." -p ".shellescape(l:password)." -o ".a:file." -"
     call system(l:cmd)
 
     if v:shell_error != 0
@@ -28,7 +28,7 @@ function Encrypt(file)
     endif
 endfunction
 
-function Decrypt(file)
+function! Decrypt(file)
     if !filereadable(a:file)
         echohl ErrorMsg | echo "File not found" | echohl None
         return
@@ -47,5 +47,5 @@ function Decrypt(file)
     call setline(1, split(l:decrypted, "\n"))
 endfunction
 
-command! -nargs=1 -complete=file Encrypt call Encrypt(<f-args>)
+command! -range -nargs=1 -complete=file Encrypt <line1>,<line2>call Encrypt(<range>, <f-args>)
 command! -nargs=1 -complete=file Decrypt call Decrypt(<f-args>)
