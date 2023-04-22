@@ -1,16 +1,12 @@
-# Encrypt Vim
+*vim-encrypt* plugin that use aescrypt to encrypt and decrypt text
 
-## Description
+Author: LordPax
+
+INTRODUCTION
 
 Plugin that use aescrypt to encrypt and decrypt text
 
-## Pre-requis
+COMMANDS
 
-* [aescrypt](https://www.aescrypt.com/download/)
-
-## Usage
-
-```
 :Encrypt <file>                                  Encrypt the current buffer to <file>
 :Decrypt <file>                                  Decrypt <file> to the current buffer
-```
