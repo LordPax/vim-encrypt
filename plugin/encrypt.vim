@@ -43,8 +43,7 @@ function! Decrypt(file)
         return
     endif
 
-    normal! ggdG
-    call setline(1, split(l:decrypted, "\n"))
+    execute "normal! o".l:decrypted
 endfunction
 
 command! -range -nargs=1 -complete=file Encrypt <line1>,<line2>call Encrypt(<range>, <f-args>)
