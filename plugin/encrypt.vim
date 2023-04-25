@@ -17,7 +17,9 @@ function! Encrypt(is_selection, file) range
         return
     endif
 
-    let l:content = a:is_selection ? join(getline(a:firstline, a:lastline), "\n") : join(getline(1, "$"), "\n")
+    let l:content = a:is_selection 
+        \? join(getline(a:firstline, a:lastline), "\n") 
+        \: join(getline(1, "$"), "\n")
 
     let l:cmd = "echo -e ".shellescape(l:content)." | ".g:encryptprg." -p ".shellescape(l:password)." -o ".a:file." -"
     call system(l:cmd)
@@ -43,7 +45,8 @@ function! Decrypt(file)
         return
     endif
 
-    execute "normal! o".l:decrypted
+    let l:exec = getline('.') =~ '^\s*$' ? "normal! i" : "normal! o"
+    execute l:exec.l:decrypted
 endfunction
 
 command! -range -nargs=1 -complete=file Encrypt <line1>,<line2>call Encrypt(<range>, <f-args>)
