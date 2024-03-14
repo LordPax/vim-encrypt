@@ -1,5 +1,6 @@
 let g:encryptprg = "aescrypt -e"
 let g:decryptprg = "aescrypt -d"
+let g:dependency = ["aescrypt"]
 
 function! Input(txt)
     call inputsave()
@@ -8,7 +9,19 @@ function! Input(txt)
     return l:val ==# "" ? Input(a:txt) : l:val
 endfunction
 
+function! CheckDependencies()
+    for dep in g:dependency
+        if !executable(dep)
+            echohl ErrorMsg | echo "Dependency ".dep." not found" | echohl None
+            return 1
+        endif
+    endfor
+    return 0
+endfunction
+
 function! Encrypt(is_selection, file) range
+    if CheckDependencies() | return | endif
+
     let l:password = Input("Enter password: ")
     let l:passwordRep = Input("\nRe-enter password: ")
 
@@ -31,6 +44,8 @@ function! Encrypt(is_selection, file) range
 endfunction
 
 function! Decrypt(file)
+    if CheckDependencies() | return | endif
+
     if !filereadable(a:file)
         echohl ErrorMsg | echo "File not found" | echohl None
         return
