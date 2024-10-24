@@ -1,12 +1,28 @@
-*vim-encrypt* plugin that use aescrypt to encrypt and decrypt text
+*vim-encrypt* File Encryption Plugin
 
 Author: LordPax
 
-INTRODUCTION
-
-Plugin that use aescrypt to encrypt and decrypt text
-
 COMMANDS
 
-:[range]Encrypt <file>                  Encrypt the current buffer to <file>
-:Decrypt <file>                         Decrypt <file> to the current buffer
+*:Encrypt* <file>
+  Encrypts the selected text or entire buffer and saves it to <file>.
+  Usage: :[range]Encrypt <file>
+
+*:Decrypt* <file>
+  Decrypts the content of <file> and inserts it into the current buffer.
+  Usage: :Decrypt <file>
+
+CONFIGURATION
+
+g:encryptprg     - Command used for encryption (default: "age -e")
+g:decryptprg     - Command used for decryption (default: "age -d")
+g:dependency     - List of required dependencies (default: ["age"])
+
+EXAMPLES
+
+:Encrypt secret.txt
+:'<,'>Encrypt selected_text.enc
+:Decrypt encrypted_file.txt
+
+Note: Ensure that the 'age' command-line tool is installed and accessible
+in your PATH for the default encryption/decryption to work.
